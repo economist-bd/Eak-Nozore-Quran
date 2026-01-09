@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>এক নজরে কুরআন</title>
+    <title>তুমিও জিতবে - রিডার</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -11,7 +11,7 @@
 <body>
 
     <header>
-        <h1>মিজানুর_রহমান_আযহারী</h1>
+        <h1>তুমিও জিতবে</h1>
     </header>
 
     <div class="controls">
@@ -20,15 +20,16 @@
         <button id="next-btn">পরবর্তী</button>
     </div>
 
-    <div class="canvas-container">
-        <canvas id="pdf-render"></canvas>
+    <div class="book-stage">
+        <div class="canvas-container" id="book-page">
+            <canvas id="pdf-render"></canvas>
+        </div>
     </div>
 
     <button id="install-btn" style="display: none;">অ্যাপ ইন্সটল করুন</button>
 
     <script src="app.js"></script>
     <script>
-        // PDF.js এর ওয়ার্কার সেটআপ
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     </script>
 </body>
