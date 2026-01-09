@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এক_নজরে_কুরআন_মিজানুর_রহমান_আযহারী</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>এক_নজরে_কুরআন_মিজানুর_রহমান_আযহারী</h1>
+    </header>
+
+    <div class="controls">
+        <button id="prev-btn">পূর্ববর্তী</button>
+        <span id="page-num">Page: 1</span>
+        <button id="next-btn">পরবর্তী</button>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="pdf-render"></canvas>
+    </div>
+
+    <button id="install-btn" style="display: none;">অ্যাপ ইন্সটল করুন</button>
+
+    <script src="app.js"></script>
+    <script>
+        // PDF.js এর ওয়ার্কার সেটআপ
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+</body>
+</html>
