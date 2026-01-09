@@ -1,56 +1,110 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    text-align: center;
+    background-color: #e0e0e0; /* টেবিলের বা ব্যাকগ্রাউন্ড কালার */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
 header {
-    background-color: #333;
+    width: 100%;
+    background-color: #2c3e50;
     color: white;
-    padding: 10px;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
 }
 
 .controls {
-    margin: 15px 0;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     align-items: center;
+    z-index: 10;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 10px 25px;
+    background-color: #e67e22; /* বাটনে সুন্দর কালার */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+button:active {
+    transform: scale(0.95);
 }
 
 button:disabled {
-    background-color: #ccc;
+    background-color: #bdc3c7;
+    cursor: not-allowed;
 }
 
-.canvas-container {
-    width: 100%;
-    overflow: auto;
+#page-num {
+    font-weight: bold;
+    color: #333;
+    background: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+}
+
+/* --- 3D বুক কন্টেইনার এবং অ্যানিমেশন --- */
+
+.book-stage {
+    perspective: 1500px; /* 3D গভীরতা তৈরি করে */
+    width: 90%;
+    max-width: 800px;
+    margin-bottom: 50px;
     display: flex;
     justify-content: center;
 }
 
+.canvas-container {
+    background-color: white;
+    padding: 20px; /* পাতার মার্জিন */
+    box-shadow: 
+        inset 20px 0 50px rgba(0,0,0,0.1), /* বইয়ের মাঝখানের ভাঁজ বা Spine এর শ্যাডো */
+        10px 10px 30px rgba(0,0,0,0.3); /* বাইরের শ্যাডো */
+    border-radius: 0 10px 10px 0; /* ডানদিকের কোণাগুলো একটু গোল */
+    border-left: 5px solid #d35400; /* বইয়ের বাইন্ডিং কালার */
+    
+    /* অ্যানিমেশন ট্রানজিশন */
+    transform-origin: left center; /* অ্যানিমেশন হবে বাম দিক থেকে */
+    transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out;
+    transform-style: preserve-3d;
+}
+
 canvas {
-    border: 1px solid #ccc;
     max-width: 100%;
     height: auto;
+    display: block;
+}
+
+/* যখন পাতা উল্টানো হবে (Next Page) */
+.page-turning {
+    transform: rotateY(-90deg); /* ৯০ ডিগ্রি ঘুরবে */
+    opacity: 0.5;
+}
+
+/* যখন পাতা উল্টানো হবে (Prev Page) */
+.page-turning-back {
+    transform: rotateY(90deg);
+    opacity: 0.5;
 }
 
 #install-btn {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #28a745;
-    z-index: 1000;
+    background-color: #27ae60;
 }
