@@ -1,4 +1,4 @@
-const url = 'book.pdf'; // আপনার পিডিএফ ফাইলের নাম এখানে থাকতে হবে
+const url = 'book.pdf'; 
 
 let pdfDoc = null,
     pageNum = 1,
@@ -7,13 +7,12 @@ let pdfDoc = null,
 
 const scale = 1.5,
     canvas = document.querySelector('#pdf-render'),
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d'),
+    bookPage = document.querySelector('#book-page'); // কন্টেইনার ধরা হলো
 
-// পেজ রেন্ডার ফাংশন
 const renderPage = num => {
     pageIsRendering = true;
 
-    // পেজ আনা
     pdfDoc.getPage(num).then(page => {
         const viewport = page.getViewport({ scale });
         canvas.height = viewport.height;
@@ -23,10 +22,9 @@ const renderPage = num => {
             canvasContext: ctx,
             viewport
         };
-
+        
         const renderTask = page.render(renderCtx);
 
-        // রেন্ডার শেষ হলে
         renderTask.promise.then(() => {
             pageIsRendering = false;
             if (pageNumPending !== null) {
@@ -35,12 +33,10 @@ const renderPage = num => {
             }
         });
 
-        // পেজ নম্বর আপডেট
         document.querySelector('#page-num').textContent = `Page: ${num}`;
     });
 };
 
-// কিউতে পেজ রাখা
 const queueRenderPage = num => {
     if (pageIsRendering) {
         pageNumPending = num;
@@ -49,38 +45,49 @@ const queueRenderPage = num => {
     }
 };
 
-// পূর্ববর্তী পেজ
+// --- পাতা উল্টানোর লজিক ---
+
 const showPrevPage = () => {
     if (pageNum <= 1) return;
-    pageNum--;
-    queueRenderPage(pageNum);
+    
+    // অ্যানিমেশন ক্লাস যোগ করা (উল্টো দিক থেকে)
+    bookPage.classList.add('page-turning-back');
+
+    setTimeout(() => {
+        pageNum--;
+        queueRenderPage(pageNum);
+        // অ্যানিমেশন ক্লাস রিমুভ করা যাতে পাতা আবার সোজা হয়
+        bookPage.classList.remove('page-turning-back');
+    }, 300); // ৩০০ মিলি সেকেন্ড পর কন্টেন্ট লোড হবে (অ্যানিমেশনের অর্ধেক সময়)
 };
 
-// পরবর্তী পেজ
 const showNextPage = () => {
     if (pageNum >= pdfDoc.numPages) return;
-    pageNum++;
-    queueRenderPage(pageNum);
+
+    // অ্যানিমেশন ক্লাস যোগ করা
+    bookPage.classList.add('page-turning');
+
+    setTimeout(() => {
+        pageNum++;
+        queueRenderPage(pageNum);
+        // অ্যানিমেশন ক্লাস রিমুভ করা
+        bookPage.classList.remove('page-turning');
+    }, 300); 
 };
 
-// পিডিএফ ডকুমেন্ট লোড করা
 pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
     pdfDoc = pdfDoc_;
     renderPage(pageNum);
 }).catch(err => {
-    console.error('PDF লোড করতে সমস্যা হচ্ছে: ', err);
-    // অফলাইনে থাকলে ক্যাশ থেকে লোড করার লজিক এখানে যোগ করা যায়
+    console.error('Error: ', err);
 });
 
-// বাটন ইভেন্ট
 document.querySelector('#prev-btn').addEventListener('click', showPrevPage);
 document.querySelector('#next-btn').addEventListener('click', showNextPage);
 
-// --- PWA সার্ভিস ওয়ার্কার রেজিস্টার ---
+// Service Worker (আগের মতোই থাকবে)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker Registered'))
-            .catch(err => console.log('Service Worker Error: ', err));
+        navigator.serviceWorker.register('./sw.js').then(reg => console.log('SW Registered'));
     });
 }
